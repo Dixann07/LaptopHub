@@ -20,10 +20,6 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
-              <Badge variant="secondary" className="w-fit">
-                <Star className="w-3 h-3 mr-1" />
-                Trusted by 50,000+ customers
-              </Badge>
               <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
                 Find Your Perfect
                 <span className="text-primary block">Laptop Today</span>
