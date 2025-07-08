@@ -60,21 +60,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative z-10 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 transform rotate-3 hover:rotate-0 transition-transform duration-300">
-              <div className="aspect-video bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
-                <Laptop className="h-16 w-16 text-white" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">MacBook Pro M3</h3>
-              <p className="text-muted-foreground text-sm mb-4">Powerful performance meets stunning design</p>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-primary">{formatNPR(329868)}</span>
-                <Badge>In Stock</Badge>
-              </div>
-            </div>
-
-            {/* Background decoration */}
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-200 to-purple-200 dark:from-blue-900 dark:to-purple-900 rounded-2xl transform -rotate-6 scale-105 opacity-20"></div>
+            
           </div>
         </div>
       </div>
