@@ -12,7 +12,7 @@ export default function AboutPage() {
             <Link href="/">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="h-6 w-6" />
-                <span className="text-xl font-bold">ShopTrack</span>
+                <span className="text-xl font-bold">Laptop Hub</span>
               </div>
             </Link>
           </div>
