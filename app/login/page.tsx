@@ -28,7 +28,6 @@ export default function LoginPage() {
   })
   const [error, setError] = useState("")
   const [recentUsers, setRecentUsers] = useState<{ email: string; type: "customer" | "admin" }[]>([])
-  const [isLoginView, setIsLoginView] = useState(true)
 
   useEffect(() => {
     initializeUsers()
@@ -118,47 +117,57 @@ export default function LoginPage() {
         </div>
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
-            <h1 className="text-3xl font-bold">Welcome Back!</h1>
             <p className="text-lg">
-              To keep connected with us please login with your personal info
+              &ldquo;Laptop Hub has made it incredibly easy to manage our laptop inventory and serve customers efficiently.&rdquo;
             </p>
+            <footer className="text-sm">Anita Sharma, Manager at Laptop Hub Nepal</footer>
           </blockquote>
         </div>
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
-          {isLoginView ? (
-            <>
-              <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">SIGN IN</h1>
+          <div className="flex flex-col space-y-2 text-center">
+            <h1 className="text-2xl font-semibold tracking-tight">Sign in to Laptop Hub</h1>
+            <p className="text-sm text-muted-foreground">Log in to manage your orders, cart, or inventory</p>
+          </div>
+
+          {recentUsers.length > 0 && (
+            <div className="space-y-2">
+              <h2 className="text-sm font-medium">Recent logins</h2>
+              <div className="flex flex-col gap-2">
+                {recentUsers.map((user, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    className="justify-start"
+                    onClick={() => selectRecentUser(user.email, user.type)}
+                  >
+                    <div className="flex items-center">
+                      <div className="mr-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs">
+                        {user.type === "admin" ? "A" : "C"}
+                      </div>
+                      <span>{user.email}</span>
+                    </div>
+                  </Button>
+                ))}
               </div>
+            </div>
+          )}
 
-              {recentUsers.length > 0 && (
-                <div className="space-y-2">
-                  <h2 className="text-sm font-medium">Recent logins</h2>
-                  <div className="flex flex-col gap-2">
-                    {recentUsers.map((user, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        className="justify-start"
-                        onClick={() => selectRecentUser(user.email, user.type)}
-                      >
-                        <div className="flex items-center">
-                          <div className="mr-2 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-xs">
-                            {user.type === "admin" ? "A" : "C"}
-                          </div>
-                          <span>{user.email}</span>
-                        </div>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              )}
+          <Tabs defaultValue="customer" value={userType} onValueChange={(v) => setUserType(v as any)} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="customer">Customer</TabsTrigger>
+              <TabsTrigger value="admin">Admin</TabsTrigger>
+            </TabsList>
 
+            <TabsContent value="customer">
               <Card>
                 <form onSubmit={handleSubmit}>
-                  <CardContent className="space-y-4 pt-6">
+                  <CardHeader>
+                    <CardTitle>Customer Login</CardTitle>
+                    <CardDescription>Access your account to shop laptops and accessories</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
                     {error && (
                       <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
@@ -198,105 +207,83 @@ export default function LoginPage() {
                       />
                     </div>
                   </CardContent>
-                  <CardFooter className="flex flex-col gap-4">
+                  <CardFooter>
                     <Button className="w-full" type="submit" disabled={isLoading}>
-                      {isLoading ? "Signing in..." : "SIGN IN"}
+                      {isLoading ? "Signing in..." : "Sign In"}
                     </Button>
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">
-                          Or continue with
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex justify-center gap-4">
-                      <Button variant="outline" size="icon">
-                        <span className="sr-only">Facebook</span>
-                        f
-                      </Button>
-                      <Button variant="outline" size="icon">
-                        <span className="sr-only">Google</span>
-                        G+
-                      </Button>
-                      <Button variant="outline" size="icon">
-                        <span className="sr-only">LinkedIn</span>
-                        in
-                      </Button>
-                    </div>
                   </CardFooter>
                 </form>
               </Card>
+            </TabsContent>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
-                Don't have an account?{" "}
-                <Button variant="link" className="p-0" onClick={() => setIsLoginView(false)}>
-                  Create Account
-                </Button>
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col space-y-2 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight">Create Account</h1>
-              </div>
-
+            <TabsContent value="admin">
               <Card>
-                <CardContent className="space-y-4 pt-6">
-                  <div className="flex justify-center gap-4">
-                    <Button variant="outline" size="icon">
-                      <span className="sr-only">Facebook</span>
-                      f
-                    </Button>
-                    <Button variant="outline" size="icon">
-                      <span className="sr-only">Google</span>
-                      G+
-                    </Button>
-                    <Button variant="outline" size="icon">
-                      <span className="sr-only">LinkedIn</span>
-                      in
-                    </Button>
-                  </div>
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <span className="w-full border-t" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-background px-2 text-muted-foreground">
-                        or use your email for registration
-                      </span>
-                    </div>
-                  </div>
-                  <div className="space-y-4">
+                <form onSubmit={handleSubmit}>
+                  <CardHeader>
+                    <CardTitle>Admin Login</CardTitle>
+                    <CardDescription>Manage Laptop Hub inventory, users, and reports</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {error && (
+                      <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Error</AlertTitle>
+                        <AlertDescription>{error}</AlertDescription>
+                      </Alert>
+                    )}
                     <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
-                      <Input id="name" placeholder="Your name" required />
+                      <Label htmlFor="admin-email">Email</Label>
+                      <Input
+                        id="admin-email"
+                        name="email"
+                        type="email"
+                        placeholder="admin@example.com"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="you@example.com" required />
+                      <div className="flex items-center justify-between">
+                        <Label htmlFor="admin-password">Password</Label>
+                        <Link
+                          href="/forgot-password"
+                          className="text-xs text-muted-foreground underline-offset-4 hover:underline"
+                        >
+                          Forgot password?
+                        </Link>
+                      </div>
+                      <Input
+                        id="admin-password"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                      />
                     </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input id="password" type="password" required />
+                    <div className="text-sm text-muted-foreground">
+                      <p>Demo admin credentials:</p>
+                      <p>Email: admin@example.com</p>
+                      <p>Password: admin123</p>
                     </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">SIGN UP</Button>
-                </CardFooter>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" type="submit" disabled={isLoading}>
+                      {isLoading ? "Signing in..." : "Sign In"}
+                    </Button>
+                  </CardFooter>
+                </form>
               </Card>
+            </TabsContent>
+          </Tabs>
 
-              <p className="px-8 text-center text-sm text-muted-foreground">
-                Already have an account?{" "}
-                <Button variant="link" className="p-0" onClick={() => setIsLoginView(true)}>
-                  Sign In
-                </Button>
-              </p>
-            </>
-          )}
+          <p className="px-8 text-center text-sm text-muted-foreground">
+            Don't have an account?{" "}
+            <Link href="/register" className="underline underline-offset-4 hover:text-primary">
+              Register now
+            </Link>
+          </p>
         </div>
       </div>
     </div>
