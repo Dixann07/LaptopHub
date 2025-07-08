@@ -66,7 +66,7 @@ export default function AboutPage() {
             </div>
             <div className="relative h-[300px] rounded-xl overflow-hidden">
               <Image
-                src="/placeholder.svg?height=600&width=800&text=Our+Team"
+                src="/image (11).png?height=600&width=800&text=Our+Team"
                 alt="Laptop Hub Team"
                 className="object-cover"
                 fill
@@ -234,7 +234,7 @@ export default function AboutPage() {
         <div className="border-t">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-3">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              © 2024 Laptop Hub. All rights reserved.
+              © 2025 Laptop Hub. All rights reserved.
             </p>
           </div>
         </div>
