@@ -19,7 +19,7 @@ export interface Product {
 }
 
 export interface CartItem {
-  productId: string // Changed from 'id' to 'productId' for clarity
+  id: string
   quantity: number
 }
 
@@ -57,61 +57,15 @@ export const initializeInventory = () => {
 
   const inventory = localStorage.getItem("inventory")
   if (!inventory) {
-    // Initialize with sample products for testing
-    const sampleProducts: Product[] = [
-      {
-        id: "laptop-1",
-        name: "MacBook Pro 14-inch",
-        price: 199900,
-        quantity: 10,
-        category: "laptops",
-        description: "Powerful laptop with M2 Pro chip",
-        image: "/placeholder.svg?height=300&width=300",
-        specifications: {
-          processor: "Apple M2 Pro",
-          ram: "16GB",
-          storage: "512GB SSD",
-          display: "14-inch Liquid Retina XDR",
-        },
-      },
-      {
-        id: "laptop-2",
-        name: "Dell XPS 13",
-        price: 129900,
-        quantity: 15,
-        category: "laptops",
-        description: "Ultra-portable laptop with Intel Core i7",
-        image: "/placeholder.svg?height=300&width=300",
-        specifications: {
-          processor: "Intel Core i7-1260P",
-          ram: "16GB",
-          storage: "512GB SSD",
-          display: "13.4-inch FHD+",
-        },
-      },
-      {
-        id: "laptop-3",
-        name: "ThinkPad X1 Carbon",
-        price: 149900,
-        quantity: 8,
-        category: "laptops",
-        description: "Business laptop with excellent keyboard",
-        image: "/placeholder.svg?height=300&width=300",
-        specifications: {
-          processor: "Intel Core i7-1260P",
-          ram: "16GB",
-          storage: "1TB SSD",
-          display: "14-inch WUXGA",
-        },
-      },
-    ]
-    localStorage.setItem("inventory", JSON.stringify(sampleProducts))
+    // Initialize with empty inventory - admin will add products later
+    localStorage.setItem("inventory", JSON.stringify([]))
   }
 }
 
 // Get all products
 export const getProducts = (): Product[] => {
   if (typeof window === "undefined") return []
+
   const inventory = localStorage.getItem("inventory")
   return inventory ? JSON.parse(inventory) : []
 }
@@ -125,12 +79,15 @@ export const getProductById = (id: string): Product | undefined => {
 // Add a new product
 export const addProduct = (product: Omit<Product, "id">): Product => {
   const products = getProducts()
+
   const newProduct: Product = {
     ...product,
-    id: `product-${Date.now()}`,
+    id: Date.now().toString(),
   }
+
   products.push(newProduct)
   localStorage.setItem("inventory", JSON.stringify(products))
+
   return newProduct
 }
 
@@ -138,11 +95,13 @@ export const addProduct = (product: Omit<Product, "id">): Product => {
 export const updateProduct = (id: string, updates: Partial<Product>): Product | null => {
   const products = getProducts()
   const index = products.findIndex((product) => product.id === id)
+
   if (index === -1) return null
 
   const updatedProduct = { ...products[index], ...updates }
   products[index] = updatedProduct
   localStorage.setItem("inventory", JSON.stringify(products))
+
   return updatedProduct
 }
 
@@ -150,6 +109,7 @@ export const updateProduct = (id: string, updates: Partial<Product>): Product | 
 export const deleteProduct = (id: string): boolean => {
   const products = getProducts()
   const filteredProducts = products.filter((product) => product.id !== id)
+
   if (filteredProducts.length === products.length) return false
 
   localStorage.setItem("inventory", JSON.stringify(filteredProducts))
@@ -159,6 +119,7 @@ export const deleteProduct = (id: string): boolean => {
 // Get cart items
 export const getCart = (): CartItem[] => {
   if (typeof window === "undefined") return []
+
   const cart = localStorage.getItem("cart")
   return cart ? JSON.parse(cart) : []
 }
@@ -166,6 +127,7 @@ export const getCart = (): CartItem[] => {
 // Add item to cart
 export const addToCart = (productId: string, quantity = 1): { success: boolean; message: string } => {
   const product = getProductById(productId)
+
   if (!product) {
     return { success: false, message: "Product not found" }
   }
@@ -175,21 +137,22 @@ export const addToCart = (productId: string, quantity = 1): { success: boolean; 
   }
 
   const cart = getCart()
-  const existingItem = cart.find((item) => item.productId === productId)
+  const existingItem = cart.find((item) => item.id === productId)
 
   if (existingItem) {
     // Check if we're trying to add more than available
     if (existingItem.quantity + quantity > product.quantity) {
       return { success: false, message: "Not enough stock available" }
     }
+
     // Update quantity
     const updatedCart = cart.map((item) =>
-      item.productId === productId ? { ...item, quantity: item.quantity + quantity } : item,
+      item.id === productId ? { ...item, quantity: item.quantity + quantity } : item,
     )
     localStorage.setItem("cart", JSON.stringify(updatedCart))
   } else {
     // Add new item
-    cart.push({ productId, quantity })
+    cart.push({ id: productId, quantity })
     localStorage.setItem("cart", JSON.stringify(cart))
   }
 
@@ -199,7 +162,8 @@ export const addToCart = (productId: string, quantity = 1): { success: boolean; 
 // Remove item from cart
 export const removeFromCart = (productId: string): boolean => {
   const cart = getCart()
-  const updatedCart = cart.filter((item) => item.productId !== productId)
+  const updatedCart = cart.filter((item) => item.id !== productId)
+
   if (updatedCart.length === cart.length) return false
 
   localStorage.setItem("cart", JSON.stringify(updatedCart))
@@ -214,6 +178,7 @@ export const updateCartItemQuantity = (productId: string, quantity: number): { s
   }
 
   const product = getProductById(productId)
+
   if (!product) {
     return { success: false, message: "Product not found" }
   }
@@ -223,7 +188,8 @@ export const updateCartItemQuantity = (productId: string, quantity: number): { s
   }
 
   const cart = getCart()
-  const updatedCart = cart.map((item) => (item.productId === productId ? { ...item, quantity } : item))
+  const updatedCart = cart.map((item) => (item.id === productId ? { ...item, quantity } : item))
+
   localStorage.setItem("cart", JSON.stringify(updatedCart))
   return { success: true, message: "Cart updated" }
 }
@@ -236,6 +202,7 @@ export const clearCart = (): void => {
 // Get all orders
 export const getOrders = (): Order[] => {
   if (typeof window === "undefined") return []
+
   const orders = localStorage.getItem("orders")
   return orders ? JSON.parse(orders) : []
 }
@@ -251,6 +218,7 @@ export const createOrder = (
   console.log("Creating order for customer:", customerName, customerEmail)
 
   const cart = getCart()
+
   if (cart.length === 0) {
     return { success: false, message: "Cart is empty" }
   }
@@ -261,14 +229,10 @@ export const createOrder = (
 
   // Check stock and prepare order items
   for (const cartItem of cart) {
-    const product = products.find((p) => p.id === cartItem.productId) // Fixed: use productId
+    const product = products.find((p) => p.id === cartItem.id)
+
     if (!product) {
-      console.error(`Product not found for ID: ${cartItem.productId}`)
-      console.log(
-        "Available products:",
-        products.map((p) => ({ id: p.id, name: p.name })),
-      )
-      return { success: false, message: `Product with ID ${cartItem.productId} not found` }
+      return { success: false, message: `Product with ID ${cartItem.id} not found` }
     }
 
     if (product.quantity < cartItem.quantity) {
@@ -306,18 +270,18 @@ export const createOrder = (
 
   console.log("New order created:", newOrder)
 
-  // Update inventory quantities
+  // Update inventory
   for (const item of cart) {
-    const productIndex = products.findIndex((p) => p.id === item.productId)
-    if (productIndex !== -1) {
-      products[productIndex].quantity -= item.quantity
+    const product = products.find((p) => p.id === item.id)
+    if (product) {
+      product.quantity -= item.quantity
     }
   }
 
   // Save updated inventory
   localStorage.setItem("inventory", JSON.stringify(products))
 
-  // Save order
+  // Save order - this is crucial for admin visibility
   const orders = getOrders()
   orders.push(newOrder)
   localStorage.setItem("orders", JSON.stringify(orders))
@@ -341,18 +305,6 @@ export const updateOrderStatus = (orderId: string, status: Order["status"]): { s
 
   orders[index].status = status
   localStorage.setItem("orders", JSON.stringify(orders))
+
   return { success: true, message: "Order status updated" }
-}
-
-// Debug function to check inventory state
-export const debugInventory = () => {
-  console.log("=== Inventory Debug ===")
-  console.log("Products:", getProducts())
-  console.log("Cart:", getCart())
-  console.log("Orders:", getOrders())
-}
-
-// Initialize inventory when module loads
-if (typeof window !== "undefined") {
-  initializeInventory()
 }
