@@ -4,22 +4,16 @@ import { Badge } from "@/components/ui/badge"
 import { Laptop, Star, Zap, Shield } from "lucide-react"
 
 export default function HeroSection() {
-  // Format NPR currency
-  const formatNPR = (amount: number) => {
-    return new Intl.NumberFormat("ne-NP", {
-      style: "currency",
-      currency: "NPR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount)
-  }
-
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       <div className="container relative z-10 py-20 lg:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
+              <Badge variant="secondary" className="w-fit">
+                <Star className="w-3 h-3 mr-1" />
+                Trusted by 50,000+ customers
+              </Badge>
               <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
                 Find Your Perfect
                 <span className="text-primary block">Laptop Today</span>
@@ -55,9 +49,7 @@ export default function HeroSection() {
               </div>
             </div>
           </div>
-
-            
-          </div>
+          {/* Optional second column for image/banner */}
         </div>
       </div>
 
@@ -66,7 +58,9 @@ export default function HeroSection() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url("")`,
+            backgroundImage: `url("")`, // Add image URL or remove if not used
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
         ></div>
       </div>
