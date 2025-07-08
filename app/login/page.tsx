@@ -109,12 +109,22 @@ export default function LoginPage() {
 
   return (
     <div className="container relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-primary" />
+      <div className="relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
+        {/* Changed background to gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-900 to-indigo-900" />
+
+        {/* Logo at top */}
         <div className="relative z-20 flex items-center text-lg font-medium">
           <ShoppingBag className="mr-2 h-6 w-6" />
           Laptop Hub
         </div>
+
+        {/* Centered welcome message */}
+        <div className="relative z-20 flex flex-grow items-center justify-center">
+          <h2 className="text-3xl font-bold text-center">Welcome To Laptop Hub</h2>
+        </div>
+
+        {/* Quote block at bottom */}
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
@@ -289,3 +299,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
