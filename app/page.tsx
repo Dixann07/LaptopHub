@@ -91,12 +91,7 @@ export default function HomePage() {
 
         <section className="bg-muted/50 py-16">
           <div className="container">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Featured Laptops</h2>
-              <p className="text-lg text-muted-foreground">
-                Discover our handpicked selection of premium laptops for every need and budget.
-              </p>
-            </div>
+            
             <FeaturedProducts />
             <div className="text-center mt-8">
               <Link href="/products">
