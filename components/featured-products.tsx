@@ -136,13 +136,7 @@ export default function FeaturedProducts() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
-          <Link href="/products">
-            <Button size="lg" variant="outline">
-              View All Laptops
-            </Button>
-          </Link>
-        </div>
+        
       </div>
     </section>
   )
