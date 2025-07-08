@@ -51,7 +51,7 @@ export default function HeroSection() {
       </div>
 
       {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5">
+      <div>
         <div
           className="absolute inset-0"
           style={{
