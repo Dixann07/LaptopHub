@@ -18,7 +18,7 @@ export default function FeaturedProducts() {
     const loadProducts = () => {
       const allProducts = getProducts()
       // Show only first 6 products as featured
-      setProducts(allProducts.slice(0, 6))
+      setProducts(allProducts.slice(0, 3))
     }
 
     loadProducts()
