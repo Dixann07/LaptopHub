@@ -407,11 +407,11 @@ export default function InventoryPage() {
                       <SelectItem value="apple">Apple</SelectItem>
                       <SelectItem value="gaming">Gaming</SelectItem>
                       <SelectItem value="business">Business</SelectItem>
+                       <SelectItem value="ultrabook">General purpose laptops</SelectItem>
                       <SelectItem value="ultrabook">Ultrabook</SelectItem>
                       <SelectItem value="convertible">2-in-1 Convertible</SelectItem>
                       <SelectItem value="dell">Dell</SelectItem>
-                      <SelectItem value="microsoft">Microsoft</SelectItem>
-                      <SelectItem value="modular">Modular</SelectItem>
+                    
                     </SelectContent>
                   </Select>
                 </div>
