@@ -237,7 +237,7 @@ export default function HomePage() {
         <div className="border-t">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-3">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              © 2024 LaptopHub. All rights reserved.
+              © 2025 LaptopHub. All rights reserved.
             </p>
           </div>
         </div>
