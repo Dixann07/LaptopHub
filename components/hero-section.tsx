@@ -11,7 +11,7 @@ export default function HeroSection() {
           <div className="space-y-8">
             <div className="space-y-4">
              
-              <h1 className="text-blue lg:text-6xl font-bold tracking-tight">
+              <h1 className="text-blue-500 lg:text-6xl font-bold tracking-tight">
                 Find Your Perfect
                 <span className="text-primary block">Laptop Today</span>
               </h1>
