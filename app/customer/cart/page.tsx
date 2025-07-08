@@ -13,20 +13,23 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link"
-import {
-  getProducts,
-  getCart,
-  updateCartItemQuantity,
-  removeFromCart,
-  createOrder,
-  type CartItem,
-  type Product,
-} from "@/lib/inventory"
+import { getProducts, getCart, updateCartItemQuantity, removeFromCart, createOrder } from "@/lib/inventory"
 
 interface CartItemWithProduct {
-  productId: string // Changed from 'id' to 'productId'
+  id: string
   quantity: number
-  product: Product
+  product: {
+    id: string
+    name: string
+    price: number
+    image: string
+    category: string
+    specifications?: {
+      processor?: string
+      ram?: string
+      storage?: string
+    }
+  }
 }
 
 interface ShippingAddress {
@@ -61,6 +64,7 @@ export default function CartPage() {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
     const userType = localStorage.getItem("userType")
+
     if (!isLoggedIn || userType !== "customer") {
       router.push("/login")
     }
@@ -83,33 +87,32 @@ export default function CartPage() {
   }, [])
 
   const loadCartItems = () => {
-    const cart: CartItem[] = getCart()
+    const cart = getCart()
     const products = getProducts()
-
-    console.log("Cart from localStorage:", cart)
-    console.log("Available products:", products)
 
     const cartWithProducts: CartItemWithProduct[] = cart
       .map((cartItem) => {
-        const product = products.find((p) => p.id === cartItem.productId) // Use productId
-        if (!product) {
-          console.warn(`Product not found for ID: ${cartItem.productId}`)
-          return null
-        }
+        const product = products.find((p) => p.id === cartItem.id)
         return {
-          productId: cartItem.productId, // Use productId
+          id: cartItem.id,
           quantity: cartItem.quantity,
-          product,
+          product: product || {
+            id: cartItem.id,
+            name: "Unknown Product",
+            price: 0,
+            image: "/placeholder.svg?height=400&width=400&text=Unknown",
+            category: "unknown",
+          },
         }
       })
-      .filter((item): item is CartItemWithProduct => item !== null)
+      .filter((item) => item.product.name !== "Unknown Product")
 
-    console.log("Cart with products:", cartWithProducts)
     setCartItems(cartWithProducts)
   }
 
   const updateQuantity = (productId: string, newQuantity: number) => {
     const result = updateCartItemQuantity(productId, newQuantity)
+
     if (result.success) {
       loadCartItems()
       toast({
@@ -127,6 +130,7 @@ export default function CartPage() {
 
   const removeItem = (productId: string) => {
     const success = removeFromCart(productId)
+
     if (success) {
       loadCartItems()
       toast({
@@ -138,6 +142,7 @@ export default function CartPage() {
 
   const applyPromoCode = () => {
     const code = promoCode.toUpperCase()
+
     switch (code) {
       case "LAPTOP10":
         setDiscount(0.1)
@@ -229,6 +234,7 @@ export default function CartPage() {
     }
 
     const user = JSON.parse(currentUser)
+
     const result = createOrder(user.id, user.name, user.email, shippingAddress, paymentMethod)
 
     if (result.success) {
@@ -245,9 +251,6 @@ export default function CartPage() {
         })
         router.push("/customer/orders")
       }, 3000)
-
-      // Clear cart items from state since createOrder already clears localStorage
-      setCartItems([])
     } else {
       toast({
         title: "Order Failed",
@@ -287,6 +290,7 @@ export default function CartPage() {
             </Link>
           </div>
         </header>
+
         <main className="flex-1 container py-8">
           <div className="text-center py-16">
             <ShoppingCart className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
@@ -339,15 +343,16 @@ export default function CartPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {cartItems.map((item) => (
-                  <div key={item.productId} className="flex gap-4 p-4 border rounded-lg">
+                  <div key={item.id} className="flex gap-4 p-4 border rounded-lg">
                     <div className="relative w-24 h-24 flex-shrink-0">
                       <Image
-                        src={item.product.image || "/placeholder.svg?height=300&width=300"}
+                        src={item.product.image || "/placeholder.svg"}
                         alt={item.product.name}
                         className="object-cover rounded-md"
                         fill
                       />
                     </div>
+
                     <div className="flex-1 space-y-2">
                       <div className="flex justify-between items-start">
                         <div>
@@ -369,13 +374,14 @@ export default function CartPage() {
                           <p className="text-sm text-muted-foreground">each</p>
                         </div>
                       </div>
+
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Button
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 bg-transparent"
-                            onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
                           >
                             <Minus className="h-4 w-4" />
@@ -385,14 +391,15 @@ export default function CartPage() {
                             variant="outline"
                             size="icon"
                             className="h-8 w-8 bg-transparent"
-                            onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
                           >
                             <Plus className="h-4 w-4" />
                           </Button>
                         </div>
+
                         <div className="flex items-center gap-4">
                           <p className="font-semibold">{formatNPR(item.product.price * item.quantity)}</p>
-                          <Button variant="destructive" size="sm" onClick={() => removeItem(item.productId)}>
+                          <Button variant="destructive" size="sm" onClick={() => removeItem(item.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </div>
@@ -555,26 +562,32 @@ export default function CartPage() {
                   <span>Subtotal</span>
                   <span>{formatNPR(subtotal)}</span>
                 </div>
+
                 {discount > 0 && (
                   <div className="flex justify-between text-green-600">
                     <span>Discount ({(discount * 100).toFixed(0)}%)</span>
                     <span>-{formatNPR(discountAmount)}</span>
                   </div>
                 )}
+
                 <div className="flex justify-between">
                   <span>VAT (13%)</span>
                   <span>{formatNPR(tax)}</span>
                 </div>
+
                 <div className="flex justify-between">
                   <span>Shipping</span>
                   <span>{shipping === 0 ? "Free" : formatNPR(shipping)}</span>
                 </div>
+
                 <Separator />
+
                 <div className="flex justify-between text-lg font-semibold">
                   <span>Total</span>
                   <span>{formatNPR(total)}</span>
                 </div>
               </CardContent>
+
               <CardFooter className="flex-col space-y-4">
                 <div className="w-full space-y-2">
                   <div className="flex gap-2">
@@ -589,9 +602,11 @@ export default function CartPage() {
                   </div>
                   <p className="text-xs text-muted-foreground">Try: LAPTOP10, FREESHIP, STUDENT15, or NEWUSER20</p>
                 </div>
+
                 <Button className="w-full" size="lg" onClick={handleCheckout} disabled={isLoading}>
                   {isLoading ? "Processing..." : `Place Order - ${formatNPR(total)}`}
                 </Button>
+
                 <p className="text-xs text-muted-foreground text-center">
                   By placing this order, you agree to our terms and conditions.
                 </p>
