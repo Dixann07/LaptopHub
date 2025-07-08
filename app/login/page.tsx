@@ -5,7 +5,7 @@ import type React from "react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { ShoppingBag, AlertCircle } from "lucide-react"
+import { ShoppingBag, AlertCircle, Eye, EyeOff } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useToast } from "@/hooks/use-toast"
-import { initializeUsers, loginUser } from "@/lib/auth"
+import { initializeUsers, loginUser, setUserSession, isLoggedIn, getUserRole } from "@/lib/auth"
 import { initializeInventory } from "@/lib/inventory"
 
 export default function LoginPage() {
@@ -22,6 +22,7 @@ export default function LoginPage() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [userType, setUserType] = useState<"customer" | "admin">("customer")
+  const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,16 +38,20 @@ export default function LoginPage() {
     // Get recent users from localStorage
     const storedRecentUsers = localStorage.getItem("recentUsers")
     if (storedRecentUsers) {
-      setRecentUsers(JSON.parse(storedRecentUsers))
+      try {
+        setRecentUsers(JSON.parse(storedRecentUsers))
+      } catch (error) {
+        console.error("Error parsing recent users:", error)
+        localStorage.removeItem("recentUsers")
+      }
     }
   }, [])
 
   // Check if already logged in
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
-    if (isLoggedIn) {
-      const userType = localStorage.getItem("userType")
-      if (userType === "admin") {
+    if (isLoggedIn()) {
+      const userRole = getUserRole()
+      if (userRole === "admin") {
         router.push("/admin/dashboard")
       } else {
         router.push("/customer/dashboard")
@@ -63,6 +68,7 @@ export default function LoginPage() {
   const selectRecentUser = (email: string, type: "customer" | "admin") => {
     setFormData((prev) => ({ ...prev, email }))
     setUserType(type)
+    setError("")
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,89 +76,89 @@ export default function LoginPage() {
     setIsLoading(true)
     setError("")
 
-    // Validate form
-    if (!formData.email || !formData.password) {
-      setError("Please fill in all fields")
-      setIsLoading(false)
-      return
-    }
-
-    // Attempt login
-    const result = loginUser(formData.email, formData.password)
-
-    if (result.success && result.user) {
-      // Check if user role matches selected tab
-      if (
-        (userType === "admin" && result.user.role !== "admin") ||
-        (userType === "customer" && result.user.role !== "customer")
-      ) {
-        setError(`This account is not registered as a ${userType}. Please use the correct login tab.`)
-        setIsLoading(false)
+    try {
+      // Validate form
+      if (!formData.email.trim() || !formData.password) {
+        setError("Please fill in all fields")
         return
       }
 
-      // Store user info in localStorage
-      localStorage.setItem("isLoggedIn", "true")
-      localStorage.setItem("userType", result.user.role)
-      localStorage.setItem("currentUser", JSON.stringify(result.user))
+      // Attempt login
+      const result = loginUser(formData.email.trim(), formData.password)
 
-      // Add to recent users
-      const newRecentUser = { email: formData.email, type: result.user.role as "customer" | "admin" }
-      const updatedRecentUsers = [
-        newRecentUser,
-        ...recentUsers.filter((user) => user.email !== formData.email).slice(0, 2),
-      ]
-      localStorage.setItem("recentUsers", JSON.stringify(updatedRecentUsers))
+      if (result.success && result.user) {
+        // Check if user role matches selected tab
+        if (
+          (userType === "admin" && result.user.role !== "admin") ||
+          (userType === "customer" && result.user.role !== "customer")
+        ) {
+          setError(`This account is not registered as a ${userType}. Please use the correct login tab.`)
+          return
+        }
 
-      toast({
-        title: "Login successful",
-        description: `You've been logged in as a ${result.user.role}.`,
-      })
+        // Set user session
+        setUserSession(result.user)
 
-      // Redirect based on user type
-      if (result.user.role === "admin") {
-        router.push("/admin/dashboard")
+        // Add to recent users
+        const newRecentUser = { email: formData.email.trim(), type: result.user.role as "customer" | "admin" }
+        const updatedRecentUsers = [
+          newRecentUser,
+          ...recentUsers.filter((user) => user.email !== formData.email.trim()).slice(0, 2),
+        ]
+        localStorage.setItem("recentUsers", JSON.stringify(updatedRecentUsers))
+
+        toast({
+          title: "Login successful",
+          description: `Welcome back, ${result.user.name}!`,
+        })
+
+        // Small delay to show toast
+        setTimeout(() => {
+          // Redirect based on user type
+          if (result.user.role === "admin") {
+            router.push("/admin/dashboard")
+          } else {
+            router.push("/customer/dashboard")
+          }
+        }, 500)
       } else {
-        router.push("/customer/dashboard")
+        setError(result.message)
       }
-    } else {
-      setError(result.message)
+    } catch (error) {
+      console.error("Login error:", error)
+      setError("An unexpected error occurred. Please try again.")
+    } finally {
       setIsLoading(false)
     }
   }
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+
   return (
     <div className="container relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
-        {/* Changed background to gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-900 to-indigo-900" />
-
-        {/* Logo at top */}
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+        <div className="absolute inset-0 bg-primary" />
         <div className="relative z-20 flex items-center text-lg font-medium">
           <ShoppingBag className="mr-2 h-6 w-6" />
-          Laptop Hub
+          ShopTrack
         </div>
-
-        {/* Centered welcome message */}
-        <div className="relative z-20 flex flex-grow items-center justify-center">
-          <h2 className="text-3xl font-bold text-center">Welcome To Laptop Hub</h2>
-        </div>
-
-        {/* Quote block at bottom */}
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;Laptop Hub has made it incredibly easy to manage our laptop inventory and serve customers efficiently.&rdquo;
+              &ldquo;ShopTrack has completely transformed how we manage our inventory. We've reduced stockouts by 75%
+              and improved our order fulfillment rate.&rdquo;
             </p>
-            <footer className="text-sm">Dikshan KC, CEO of Laptop Hub Nepal</footer>
+            <footer className="text-sm">Sarah Johnson, CEO of StyleHub</footer>
           </blockquote>
         </div>
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Sign in to Laptop Hub</h1>
-            <p className="text-sm text-muted-foreground">Log in to manage your orders, cart, or inventory</p>
+            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+            <p className="text-sm text-muted-foreground">Enter your credentials to sign in to your account</p>
           </div>
 
           {recentUsers.length > 0 && (
@@ -163,7 +169,7 @@ export default function LoginPage() {
                   <Button
                     key={index}
                     variant="outline"
-                    className="justify-start"
+                    className="justify-start bg-transparent"
                     onClick={() => selectRecentUser(user.email, user.type)}
                   >
                     <div className="flex items-center">
@@ -193,7 +199,9 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Customer Login</CardTitle>
-                    <CardDescription>Access your account to shop laptops and accessories</CardDescription>
+                    <CardDescription>
+                      Access your customer account to view orders and manage your profile
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -209,10 +217,11 @@ export default function LoginPage() {
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="john@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -225,14 +234,32 @@ export default function LoginPage() {
                           Forgot password?
                         </Link>
                       </div>
-                      <Input
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                      />
+                      <div className="relative">
+                        <Input
+                          id="password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                          disabled={isLoading}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={togglePasswordVisibility}
+                          disabled={isLoading}
+                        >
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      <p>Demo customer credentials:</p>
+                      <p>Email: john@example.com</p>
+                      <p>Password: customer123</p>
                     </div>
                   </CardContent>
                   <CardFooter>
@@ -248,7 +275,7 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Admin Login</CardTitle>
-                    <CardDescription>Manage Laptop Hub inventory, users, and reports</CardDescription>
+                    <CardDescription>Access your admin dashboard to manage inventory and users</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -268,6 +295,7 @@ export default function LoginPage() {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        disabled={isLoading}
                       />
                     </div>
                     <div className="space-y-2">
@@ -280,17 +308,30 @@ export default function LoginPage() {
                           Forgot password?
                         </Link>
                       </div>
-                      <Input
-                        id="admin-password"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                      />
+                      <div className="relative">
+                        <Input
+                          id="admin-password"
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                          disabled={isLoading}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                          onClick={togglePasswordVisibility}
+                          disabled={isLoading}
+                        >
+                          {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                      </div>
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      <p>Demo admin credentials:</p>
+                      <p>Default admin credentials:</p>
                       <p>Email: admin@example.com</p>
                       <p>Password: admin123</p>
                     </div>
@@ -306,9 +347,9 @@ export default function LoginPage() {
           </Tabs>
 
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="underline underline-offset-4 hover:text-primary">
-              Register now
+              Sign up
             </Link>
           </p>
         </div>
@@ -316,3 +357,4 @@ export default function LoginPage() {
     </div>
   )
 }
+
