@@ -130,7 +130,7 @@ export default function LoginPage() {
             <p className="text-lg">
               &ldquo;Laptop Hub has made it incredibly easy to manage our laptop inventory and serve customers efficiently.&rdquo;
             </p>
-            <footer className="text-sm">Anita Sharma, Manager at Laptop Hub Nepal</footer>
+            <footer className="text-sm">Dikshan KC, CEO of Laptop Hub Nepal</footer>
           </blockquote>
         </div>
       </div>
