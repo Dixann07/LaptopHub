@@ -1,4 +1,4 @@
-"use client"
+ "use client"
 
 import type React from "react"
 
@@ -29,15 +29,19 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [recentUsers, setRecentUsers] = useState<{ email: string; type: "customer" | "admin" }[]>([])
 
+  // Initialize data on first load
   useEffect(() => {
     initializeUsers()
     initializeInventory()
+
+    // Get recent users from localStorage
     const storedRecentUsers = localStorage.getItem("recentUsers")
     if (storedRecentUsers) {
       setRecentUsers(JSON.parse(storedRecentUsers))
     }
   }, [])
 
+  // Check if already logged in
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"
     if (isLoggedIn) {
@@ -66,28 +70,33 @@ export default function LoginPage() {
     setIsLoading(true)
     setError("")
 
+    // Validate form
     if (!formData.email || !formData.password) {
-      setError("Please enter both email and password.")
+      setError("Please fill in all fields")
       setIsLoading(false)
       return
     }
 
+    // Attempt login
     const result = loginUser(formData.email, formData.password)
 
     if (result.success && result.user) {
+      // Check if user role matches selected tab
       if (
         (userType === "admin" && result.user.role !== "admin") ||
         (userType === "customer" && result.user.role !== "customer")
       ) {
-        setError(`This account is not registered as a ${userType}. Please use the correct tab.`)
+        setError(`This account is not registered as a ${userType}. Please use the correct login tab.`)
         setIsLoading(false)
         return
       }
 
+      // Store user info in localStorage
       localStorage.setItem("isLoggedIn", "true")
       localStorage.setItem("userType", result.user.role)
       localStorage.setItem("currentUser", JSON.stringify(result.user))
 
+      // Add to recent users
       const newRecentUser = { email: formData.email, type: result.user.role as "customer" | "admin" }
       const updatedRecentUsers = [
         newRecentUser,
@@ -96,11 +105,16 @@ export default function LoginPage() {
       localStorage.setItem("recentUsers", JSON.stringify(updatedRecentUsers))
 
       toast({
-        title: "Login Successful",
-        description: `Welcome back! You've logged in as ${result.user.role}.`,
+        title: "Login successful",
+        description: `You've been logged in as a ${result.user.role}.`,
       })
 
-      router.push(result.user.role === "admin" ? "/admin/dashboard" : "/customer/dashboard")
+      // Redirect based on user type
+      if (result.user.role === "admin") {
+        router.push("/admin/dashboard")
+      } else {
+        router.push("/customer/dashboard")
+      }
     } else {
       setError(result.message)
       setIsLoading(false)
@@ -109,36 +123,27 @@ export default function LoginPage() {
 
   return (
     <div className="container relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
-        {/* Changed background to gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-900 to-indigo-900" />
-
-        {/* Logo at top */}
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
+        <div className="absolute inset-0 bg-primary" />
         <div className="relative z-20 flex items-center text-lg font-medium">
           <ShoppingBag className="mr-2 h-6 w-6" />
-          Laptop Hub
+          ShopTrack
         </div>
-
-        {/* Centered welcome message */}
-        <div className="relative z-20 flex flex-grow items-center justify-center">
-          <h2 className="text-3xl font-bold text-center">Welcome To Laptop Hub</h2>
-        </div>
-
-        {/* Quote block at bottom */}
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;Laptop Hub has made it incredibly easy to manage our laptop inventory and serve customers efficiently.&rdquo;
+              &ldquo;ShopTrack has completely transformed how we manage our inventory. We've reduced stockouts by 75%
+              and improved our order fulfillment rate.&rdquo;
             </p>
-            <footer className="text-sm">Dikshan KC, CEO of Laptop Hub Nepal</footer>
+            <footer className="text-sm">Sarah Johnson, CEO of StyleHub</footer>
           </blockquote>
         </div>
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Sign in to Laptop Hub</h1>
-            <p className="text-sm text-muted-foreground">Log in to manage your orders, cart, or inventory</p>
+            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
+            <p className="text-sm text-muted-foreground">Enter your credentials to sign in to your account</p>
           </div>
 
           {recentUsers.length > 0 && (
@@ -164,18 +169,24 @@ export default function LoginPage() {
             </div>
           )}
 
-          <Tabs defaultValue="customer" value={userType} onValueChange={(v) => setUserType(v as any)} className="w-full">
+          <Tabs
+            defaultValue="customer"
+            value={userType}
+            className="w-full"
+            onValueChange={(value) => setUserType(value as "customer" | "admin")}
+          >
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="customer">Customer</TabsTrigger>
               <TabsTrigger value="admin">Admin</TabsTrigger>
             </TabsList>
-
             <TabsContent value="customer">
               <Card>
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Customer Login</CardTitle>
-                    <CardDescription>Access your account to shop laptops and accessories</CardDescription>
+                    <CardDescription>
+                      Access your customer account to view orders and manage your profile
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -191,7 +202,7 @@ export default function LoginPage() {
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="m@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -225,13 +236,12 @@ export default function LoginPage() {
                 </form>
               </Card>
             </TabsContent>
-
             <TabsContent value="admin">
               <Card>
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Admin Login</CardTitle>
-                    <CardDescription>Manage Laptop Hub inventory, users, and reports</CardDescription>
+                    <CardDescription>Access your admin dashboard to manage inventory and users</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -273,7 +283,7 @@ export default function LoginPage() {
                       />
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      <p>Demo admin credentials:</p>
+                      <p>Default admin credentials:</p>
                       <p>Email: admin@example.com</p>
                       <p>Password: admin123</p>
                     </div>
@@ -289,9 +299,9 @@ export default function LoginPage() {
           </Tabs>
 
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link href="/register" className="underline underline-offset-4 hover:text-primary">
-              Register now
+              Sign up
             </Link>
           </p>
         </div>
@@ -299,4 +309,3 @@ export default function LoginPage() {
     </div>
   )
 }
-
