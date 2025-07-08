@@ -46,9 +46,9 @@ export default function AboutPage() {
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-            <h1 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-5xl">About ShopTrack</h1>
+            <h1 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-5xl">About Laptop Hub</h1>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-              Your complete solution for inventory management and e-commerce operations
+              Your trusted destination for high-quality laptops and accessories—designed for students, professionals, and gamers.
             </p>
           </div>
 
@@ -57,20 +57,17 @@ export default function AboutPage() {
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold tracking-tighter">Our Mission</h2>
                 <p className="text-muted-foreground">
-                  At ShopTrack, our mission is to empower businesses of all sizes with powerful yet simple inventory
-                  management tools. We believe that effective inventory management is the backbone of any successful
-                  e-commerce operation, and we're dedicated to making it accessible to everyone.
+                  Our mission is to provide a seamless and trustworthy online platform where students, professionals, and tech enthusiasts can discover and purchase high-quality laptops at unbeatable prices—backed by expert advice, fast shipping, and excellent customer service.
                 </p>
                 <p className="text-muted-foreground">
-                  Founded in 2020, ShopTrack has grown from a simple stock tracking tool to a comprehensive platform
-                  that helps thousands of businesses streamline their operations, reduce costs, and grow their revenue.
+                  Since 2025, Laptop Hub has been committed to delivering top-quality laptops and accessories online, helping thousands of customers find reliable tech at the best value.
                 </p>
               </div>
             </div>
             <div className="relative h-[300px] rounded-xl overflow-hidden">
               <Image
                 src="/placeholder.svg?height=600&width=800&text=Our+Team"
-                alt="ShopTrack Team"
+                alt="Laptop Hub Team"
                 className="object-cover"
                 fill
               />
@@ -84,64 +81,60 @@ export default function AboutPage() {
                 <div className="p-3 rounded-full bg-primary/10">
                   <ShoppingBag className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold">Inventory Management</h3>
+                <h3 className="text-xl font-bold">Wide Laptop Selection</h3>
                 <p className="text-muted-foreground">
-                  Track your inventory in real-time, set up low stock alerts, and manage your products with ease. Our
-                  system helps you avoid stockouts and overstock situations.
+                  Browse a wide variety of laptops from top brands—ranging from gaming powerhouses to ultrabooks—tailored to your needs and budget.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-3 rounded-full bg-primary/10">
                   <Users className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold">Customer Management</h3>
+                <h3 className="text-xl font-bold">Expert Support</h3>
                 <p className="text-muted-foreground">
-                  Build stronger relationships with your customers by tracking their purchase history, preferences, and
-                  contact information all in one place.
+                  Get expert advice on the right device for you. Our team is here to help you choose the perfect laptop based on your needs and preferences.
                 </p>
               </div>
               <div className="flex flex-col items-center text-center space-y-4">
                 <div className="p-3 rounded-full bg-primary/10">
                   <BarChart3 className="h-8 w-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold">Analytics & Reporting</h3>
+                <h3 className="text-xl font-bold">Fast & Secure Delivery</h3>
                 <p className="text-muted-foreground">
-                  Gain valuable insights into your business with detailed reports on sales, inventory turnover, and
-                  customer behavior. Make data-driven decisions to grow your business.
+                  Enjoy quick and safe delivery of your device right to your doorstep—fully insured and tracked for your peace of mind.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="mt-20">
-            <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">Why Choose ShopTrack?</h2>
+            <h2 className="text-3xl font-bold tracking-tighter text-center mb-12">Why Choose Laptop Hub?</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-4">
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Easy to Use</h3>
+                    <h3 className="text-lg font-bold">Easy to Shop</h3>
                     <p className="text-muted-foreground">
-                      Our intuitive interface makes it easy for anyone to manage inventory, regardless of technical
-                      expertise.
+                      Our user-friendly website makes it easy to compare, choose, and order laptops with just a few clicks.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Affordable</h3>
+                    <h3 className="text-lg font-bold">Affordable Prices</h3>
                     <p className="text-muted-foreground">
-                      Flexible pricing plans that grow with your business, from startups to enterprise-level operations.
+                      Get competitive pricing and exclusive online deals on premium laptops, accessories, and bundles.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Reliable</h3>
+                    <h3 className="text-lg font-bold">Trusted Quality</h3>
                     <p className="text-muted-foreground">
-                      99.9% uptime guarantee ensures your business operations run smoothly without interruption.
+                      Every product is sourced from trusted brands and verified sellers—ensuring genuine quality and customer satisfaction.
                     </p>
                   </div>
                 </div>
@@ -150,27 +143,27 @@ export default function AboutPage() {
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Scalable</h3>
+                    <h3 className="text-lg font-bold">Flexible Range</h3>
                     <p className="text-muted-foreground">
-                      Whether you have 10 products or 10,000, ShopTrack scales with your business needs.
+                      Whether you need a laptop for work, school, content creation, or gaming—we have a device for every purpose.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Secure</h3>
+                    <h3 className="text-lg font-bold">Secure Shopping</h3>
                     <p className="text-muted-foreground">
-                      Enterprise-grade security protects your data and your customers' information.
+                      Your privacy and payment information are protected with industry-grade encryption and secure checkout.
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-1" />
                   <div>
-                    <h3 className="text-lg font-bold">Excellent Support</h3>
+                    <h3 className="text-lg font-bold">Dedicated Support</h3>
                     <p className="text-muted-foreground">
-                      Our dedicated support team is available 24/7 to help you with any questions or issues.
+                      Our team is always ready to assist you with questions, order updates, or technical help—any time you need.
                     </p>
                   </div>
                 </div>
@@ -179,9 +172,9 @@ export default function AboutPage() {
           </div>
 
           <div className="mt-20 text-center">
-            <h2 className="text-3xl font-bold tracking-tighter mb-6">Ready to streamline your inventory?</h2>
+            <h2 className="text-3xl font-bold tracking-tighter mb-6">Ready to find your next laptop?</h2>
             <p className="text-muted-foreground max-w-[600px] mx-auto mb-8">
-              Join thousands of businesses that use ShopTrack to manage their inventory and grow their business.
+              Join thousands of happy customers who trust Laptop Hub for their laptop and accessory needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register">
@@ -192,7 +185,7 @@ export default function AboutPage() {
               </Link>
               <Link href="/contact">
                 <Button size="lg" variant="outline">
-                  Contact Sales
+                  Contact Us
                 </Button>
               </Link>
             </div>
@@ -205,9 +198,9 @@ export default function AboutPage() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <ShoppingBag className="h-6 w-6" />
-              <span className="text-xl font-bold">ShopTrack</span>
+              <span className="text-xl font-bold">Laptop Hub</span>
             </div>
-            <p className="text-sm text-muted-foreground">Streamline your inventory management with ShopTrack.</p>
+            <p className="text-sm text-muted-foreground">Powering your digital world—one laptop at a time.</p>
           </div>
           <div className="flex flex-col gap-2 text-sm">
             <div className="font-medium">Quick Links</div>
@@ -241,7 +234,7 @@ export default function AboutPage() {
         <div className="border-t">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-3">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              © 2024 ShopTrack. All rights reserved.
+              © 2024 Laptop Hub. All rights reserved.
             </p>
           </div>
         </div>
@@ -249,3 +242,4 @@ export default function AboutPage() {
     </div>
   )
 }
+
