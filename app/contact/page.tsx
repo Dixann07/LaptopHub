@@ -283,7 +283,7 @@ export default function ContactPage() {
         <div className="border-t">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-3">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              © 2024 Laptop Hub. All rights reserved.
+              © 2025 Laptop Hub. All rights reserved.
             </p>
           </div>
         </div>
