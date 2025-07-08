@@ -1,3 +1,4 @@
+
 "use client"
 
 import type React from "react"
@@ -36,7 +37,7 @@ export default function ContactPage() {
       setIsSubmitting(false)
       toast({
         title: "Message Sent",
-        description: "Thank you for your message. We'll get back to you soon!",
+        description: "Thank you for contacting Laptop Hub. We'll get back to you soon!",
       })
       setFormData({
         name: "",
@@ -55,7 +56,7 @@ export default function ContactPage() {
             <Link href="/">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="h-6 w-6" />
-                <span className="text-xl font-bold">ShopTrack</span>
+                <span className="text-xl font-bold">Laptop Hub</span>
               </div>
             </Link>
           </div>
@@ -89,9 +90,9 @@ export default function ContactPage() {
       <main className="flex-1">
         <section className="container py-12 md:py-24 lg:py-32">
           <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
-            <h1 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-5xl">Contact Us</h1>
+            <h1 className="font-heading text-3xl leading-[1.1] sm:text-3xl md:text-5xl">Contact Laptop Hub</h1>
             <p className="max-w-[85%] leading-normal text-muted-foreground sm:text-lg sm:leading-7">
-              Have questions or need assistance? We're here to help!
+              Have a question about a laptop or your order? We're happy to help!
             </p>
           </div>
 
@@ -101,7 +102,7 @@ export default function ContactPage() {
                 <CardHeader>
                   <CardTitle>Send us a message</CardTitle>
                   <CardDescription>
-                    Fill out the form below and we'll get back to you as soon as possible.
+                    Fill out the form below and our support team will contact you shortly.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -134,7 +135,7 @@ export default function ContactPage() {
                       <Input
                         id="subject"
                         name="subject"
-                        placeholder="How can we help you?"
+                        placeholder="Need help with my order"
                         value={formData.subject}
                         onChange={handleChange}
                         required
@@ -145,7 +146,7 @@ export default function ContactPage() {
                       <Textarea
                         id="message"
                         name="message"
-                        placeholder="Please provide details about your inquiry..."
+                        placeholder="Please describe your issue or inquiry..."
                         rows={5}
                         value={formData.message}
                         onChange={handleChange}
@@ -171,8 +172,7 @@ export default function ContactPage() {
               <div>
                 <h2 className="text-2xl font-bold tracking-tighter mb-4">Get in Touch</h2>
                 <p className="text-muted-foreground mb-6">
-                  Our team is available Monday through Friday, 9am to 5pm EST to answer your questions and provide
-                  support.
+                  Our support team is available Monday to Friday, 9am to 5pm (NPT). Feel free to contact us anytime.
                 </p>
               </div>
 
@@ -183,8 +183,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold">Email Us</h3>
-                    <p className="text-muted-foreground">support@shoptrack.com</p>
-                    <p className="text-muted-foreground">sales@shoptrack.com</p>
+                    <p className="text-muted-foreground">support@laptophub.com</p>
+                    <p className="text-muted-foreground">sales@laptophub.com</p>
                   </div>
                 </div>
 
@@ -194,8 +194,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold">Call Us</h3>
-                    <p className="text-muted-foreground">+1 (555) 123-4567</p>
-                    <p className="text-muted-foreground">Monday - Friday, 9am - 5pm EST</p>
+                    <p className="text-muted-foreground">+977 (01) 123-4567</p>
+                    <p className="text-muted-foreground">Mon - Fri, 9am - 5pm NPT</p>
                   </div>
                 </div>
 
@@ -205,9 +205,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold">Visit Us</h3>
-                    <p className="text-muted-foreground">123 Commerce Street</p>
-                    <p className="text-muted-foreground">Suite 400</p>
-                    <p className="text-muted-foreground">New York, NY 10001</p>
+                    <p className="text-muted-foreground">Tech Street, Block A</p>
+                    <p className="text-muted-foreground">New Baneshwor</p>
+                    <p className="text-muted-foreground">Kathmandu, Nepal</p>
                   </div>
                 </div>
               </div>
@@ -217,22 +217,22 @@ export default function ContactPage() {
                 <ul className="space-y-2">
                   <li>
                     <Link href="/faq" className="text-primary hover:underline">
-                      How do I get started with ShopTrack?
+                      How do I place an order on Laptop Hub?
                     </Link>
                   </li>
                   <li>
                     <Link href="/faq" className="text-primary hover:underline">
-                      What pricing plans do you offer?
+                      What are your payment options?
                     </Link>
                   </li>
                   <li>
                     <Link href="/faq" className="text-primary hover:underline">
-                      Can I integrate ShopTrack with my existing systems?
+                      How long does delivery take?
                     </Link>
                   </li>
                   <li>
                     <Link href="/faq" className="text-primary hover:underline">
-                      How secure is my data with ShopTrack?
+                      Can I return or exchange a laptop?
                     </Link>
                   </li>
                 </ul>
@@ -247,9 +247,9 @@ export default function ContactPage() {
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <ShoppingBag className="h-6 w-6" />
-              <span className="text-xl font-bold">ShopTrack</span>
+              <span className="text-xl font-bold">Laptop Hub</span>
             </div>
-            <p className="text-sm text-muted-foreground">Streamline your inventory management with ShopTrack.</p>
+            <p className="text-sm text-muted-foreground">Your trusted destination for quality laptops.</p>
           </div>
           <div className="flex flex-col gap-2 text-sm">
             <div className="font-medium">Quick Links</div>
@@ -283,7 +283,7 @@ export default function ContactPage() {
         <div className="border-t">
           <div className="container flex flex-col gap-2 py-4 md:flex-row md:items-center md:justify-between md:py-3">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              © 2024 ShopTrack. All rights reserved.
+              © 2024 Laptop Hub. All rights reserved.
             </p>
           </div>
         </div>
