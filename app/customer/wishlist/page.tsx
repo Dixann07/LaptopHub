@@ -137,7 +137,7 @@ export default function WishlistPage() {
 
       {wishlistItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">
-          <Heart className="h-16 w-16 text-muted-foreground mb-4" />
+          <Heart className="h-16 w-16 text-muted-foreground mb-4 fill-current" fill="currentColor" />
           <h2 className="text-2xl font-semibold mb-2">Your wishlist is empty</h2>
           <p className="text-muted-foreground mb-6">Save items you love to your wishlist and find them here anytime.</p>
           <Button onClick={() => router.push("/customer/dashboard")}>Discover Products</Button>
