@@ -15,7 +15,7 @@ export default function HeroSection() {
                 Find Your Perfect
                 <span className="text-primary block">Laptop Today</span>
               </h1>
-              <p className="text-lg text-muted-foreground max-w-md">
+              <p className="text-white text-muted-foreground max-w-md">
                 Discover premium laptops from top brands. Whether you're gaming, working, or creating, we have the
                 perfect device for your needs.
               </p>
@@ -38,11 +38,11 @@ export default function HeroSection() {
             <div className="flex items-center gap-8 pt-4">
               <div className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">Latest Tech</span>
+                <span className="text-white-sm font-medium">Latest Tech</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">2-Year Warranty</span>
+                <span className="text-white font-medium">2-Year Warranty</span>
               </div>
             </div>
           </div>
