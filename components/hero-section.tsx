@@ -11,7 +11,7 @@ export default function HeroSection() {
           <div className="space-y-8">
             <div className="space-y-4">
              
-              <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
+              <h1 className="text-blue lg:text-6xl font-bold tracking-tight">
                 Find Your Perfect
                 <span className="text-primary block">Laptop Today</span>
               </h1>
@@ -38,7 +38,7 @@ export default function HeroSection() {
             <div className="flex items-center gap-8 pt-4">
               <div className="flex items-center gap-2">
                 <Zap className="h-5 w-5 text-primary" />
-                <span className="text-white-sm font-medium">Latest Tech</span>
+                <span className="text-white font-medium">Latest Tech</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-5 w-5 text-primary" />
