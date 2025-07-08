@@ -1,4 +1,4 @@
- "use client"
+"use client"
 
 import type React from "react"
 
@@ -123,27 +123,36 @@ export default function LoginPage() {
 
   return (
     <div className="container relative flex h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-        <div className="absolute inset-0 bg-primary" />
+      <div className="relative hidden h-full flex-col p-10 text-white lg:flex dark:border-r">
+        {/* Changed background to gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-700 via-blue-900 to-indigo-900" />
+
+        {/* Logo at top */}
         <div className="relative z-20 flex items-center text-lg font-medium">
           <ShoppingBag className="mr-2 h-6 w-6" />
-          ShopTrack
+          Laptop Hub
         </div>
+
+        {/* Centered welcome message */}
+        <div className="relative z-20 flex flex-grow items-center justify-center">
+          <h2 className="text-3xl font-bold text-center">Welcome To Laptop Hub</h2>
+        </div>
+
+        {/* Quote block at bottom */}
         <div className="relative z-20 mt-auto">
           <blockquote className="space-y-2">
             <p className="text-lg">
-              &ldquo;ShopTrack has completely transformed how we manage our inventory. We've reduced stockouts by 75%
-              and improved our order fulfillment rate.&rdquo;
+              &ldquo;Laptop Hub has made it incredibly easy to manage our laptop inventory and serve customers efficiently.&rdquo;
             </p>
-            <footer className="text-sm">Sarah Johnson, CEO of StyleHub</footer>
+            <footer className="text-sm">Dikshan KC, CEO of Laptop Hub Nepal</footer>
           </blockquote>
         </div>
       </div>
       <div className="lg:p-8">
         <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
           <div className="flex flex-col space-y-2 text-center">
-            <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-            <p className="text-sm text-muted-foreground">Enter your credentials to sign in to your account</p>
+            <h1 className="text-2xl font-semibold tracking-tight">Sign in to Laptop Hub</h1>
+            <p className="text-sm text-muted-foreground">Log in to manage your orders, cart, or inventory</p>
           </div>
 
           {recentUsers.length > 0 && (
@@ -184,9 +193,7 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Customer Login</CardTitle>
-                    <CardDescription>
-                      Access your customer account to view orders and manage your profile
-                    </CardDescription>
+                    <CardDescription>Access your account to shop laptops and accessories</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -202,7 +209,7 @@ export default function LoginPage() {
                         id="email"
                         name="email"
                         type="email"
-                        placeholder="m@example.com"
+                        placeholder="you@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         required
@@ -241,7 +248,7 @@ export default function LoginPage() {
                 <form onSubmit={handleSubmit}>
                   <CardHeader>
                     <CardTitle>Admin Login</CardTitle>
-                    <CardDescription>Access your admin dashboard to manage inventory and users</CardDescription>
+                    <CardDescription>Manage Laptop Hub inventory, users, and reports</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {error && (
@@ -283,7 +290,7 @@ export default function LoginPage() {
                       />
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      <p>Default admin credentials:</p>
+                      <p>Demo admin credentials:</p>
                       <p>Email: admin@example.com</p>
                       <p>Password: admin123</p>
                     </div>
@@ -299,9 +306,9 @@ export default function LoginPage() {
           </Tabs>
 
           <p className="px-8 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{" "}
+            Don't have an account?{" "}
             <Link href="/register" className="underline underline-offset-4 hover:text-primary">
-              Sign up
+              Register now
             </Link>
           </p>
         </div>
