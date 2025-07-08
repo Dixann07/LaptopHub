@@ -8,6 +8,8 @@ export interface Product {
   category: string
   description: string
   image: string
+  featured: boolean
+  totalSales: number
   specifications?: {
     processor?: string
     ram?: string
@@ -70,6 +72,21 @@ export const getProducts = (): Product[] => {
   return inventory ? JSON.parse(inventory) : []
 }
 
+// Get featured products
+export const getFeaturedProducts = (): Product[] => {
+  const products = getProducts()
+  return products.filter((product) => product.featured)
+}
+
+// Get best selling products
+export const getBestSellingProducts = (limit = 6): Product[] => {
+  const products = getProducts()
+  return products
+    .filter((product) => product.totalSales > 0)
+    .sort((a, b) => b.totalSales - a.totalSales)
+    .slice(0, limit)
+}
+
 // Get product by ID
 export const getProductById = (id: string): Product | undefined => {
   const products = getProducts()
@@ -83,6 +100,8 @@ export const addProduct = (product: Omit<Product, "id">): Product => {
   const newProduct: Product = {
     ...product,
     id: Date.now().toString(),
+    featured: false,
+    totalSales: 0,
   }
 
   products.push(newProduct)
@@ -103,6 +122,24 @@ export const updateProduct = (id: string, updates: Partial<Product>): Product | 
   localStorage.setItem("inventory", JSON.stringify(products))
 
   return updatedProduct
+}
+
+// Toggle featured status
+export const toggleFeaturedProduct = (id: string): { success: boolean; message: string } => {
+  const products = getProducts()
+  const index = products.findIndex((product) => product.id === id)
+
+  if (index === -1) {
+    return { success: false, message: "Product not found" }
+  }
+
+  products[index].featured = !products[index].featured
+  localStorage.setItem("inventory", JSON.stringify(products))
+
+  return {
+    success: true,
+    message: `Product ${products[index].featured ? "added to" : "removed from"} featured list`,
+  }
 }
 
 // Delete a product
@@ -270,11 +307,12 @@ export const createOrder = (
 
   console.log("New order created:", newOrder)
 
-  // Update inventory
+  // Update inventory and sales tracking
   for (const item of cart) {
     const product = products.find((p) => p.id === item.id)
     if (product) {
       product.quantity -= item.quantity
+      product.totalSales += item.quantity // Track sales
     }
   }
 
@@ -308,3 +346,4 @@ export const updateOrderStatus = (orderId: string, status: Order["status"]): { s
 
   return { success: true, message: "Order status updated" }
 }
+
