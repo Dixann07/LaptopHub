@@ -55,7 +55,7 @@ export default function HeroSection() {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage: `url("")`, // Add image URL or remove if not used
+            backgroundImage: `url("/coverPage.jpg")`, // Add image URL or remove if not used
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
